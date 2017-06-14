@@ -3,6 +3,7 @@
 
 var superagent = require('superagent');
 const processing = require('./processing');
+const request = require('request-promise');
 
 module.exports = async function limsDownloader(links, options = {}) {
     var dataClass = [];
@@ -13,9 +14,9 @@ module.exports = async function limsDownloader(links, options = {}) {
         var nmrs = metadata.entry[0].nmrs.filter( a => a.experiment==='noesygpps1dcomp');
         var specie = metadata.entry[0].parameters.filter( a => a.description==='species')[0].value;
         if (nmrs.length > 0) {
-            var jcamp = await superagent.get(nmrs[0].resourceURL);
+            var jcamp = await request(nmrs[0].resourceURL)
             var data = processing(jcamp, options);
-            dataY.push(data.getYData());
+            dataY.push(data);
         }
         if (specie.trim().toLowerCase().match(/\barabica/)) {
             dataClass.push([0, 1]);

@@ -1,0 +1,43 @@
+{
+  "name": "coffee-svm",
+  "version": "0.0.1",
+  "description": "Download lims examples",
+  "main": "./src/index.js",
+  "files": [
+    "src"
+  ],
+  "scripts": {
+    "eslint": "eslint src test",
+    "eslint-fix": "npm run eslint -- --fix",
+    "test": "npm run test-mocha && npm run eslint",
+    "test-mocha": "mocha --require should --reporter mocha-better-spec-reporter",
+    "build": "cheminfo build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cheminfo-js/lims-downloader.git"
+  },
+  "keywords": [],
+  "author": "jobo322 <jose.bolanos@correounivalle.edu.co>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cheminfo-js/coffee-svm/issues"
+  },
+  "homepage": "https://github.com/cheminfo-js/coffee-svm#readme",
+  "devDependencies": {
+    "cheminfo-tools": "^1.11.0",
+    "eslint": "^3.12.2",
+    "eslint-config-cheminfo": "^1.6.0",
+    "eslint-plugin-no-only-tests": "^1.1.0",
+    "mocha": "^3.2.0",
+    "mocha-better-spec-reporter": "^3.1.0",
+    "should": "^11.1.2"
+  },
+  "dependencies": {
+    "fs": "0.0.1-security",
+    "request": "^2.81.0",
+    "request-promise": "^4.2.1",
+    "spectra-data": "^3.1.4",
+    "superagent": "^3.5.2"
+  }
+}
