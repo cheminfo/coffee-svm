@@ -26,9 +26,12 @@ module.exports = async function limsDownloader(links, options = {}) {
             } else {
                 continue;
             }
-            await fs.writeFile(path.join(__dirname, '../data', `${m[1]}_${m[2]}.json`), JSON.stringify({
-                data,
-                label
+
+            const y = data.sd.spectra[0].data[0].y;
+            await fs.writeFile(path.join(__dirname, '../../data', `${m[1]}_${m[2]}.json`), JSON.stringify({
+                data: y,
+                label,
+                labelNum: label === 'arabica' ? 0 : 1
             }));
         }
     }
