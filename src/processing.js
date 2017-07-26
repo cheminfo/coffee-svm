@@ -7,7 +7,7 @@ module.exports = function processing(jcamp, options = {}) {
     options = Object.assign({}, defaultOptions, options);
     var signals = options.signals || [];
     var spectrum = SD.NMR.fromJcamp(jcamp, {});
-    if(options.reduceData) {
+    if (options.reduceData) {
         spectrum.reduceData(options.from, options.to, {nbPoints: options.nbPoints});
     }
     spectrum.suppressZones(signals);
