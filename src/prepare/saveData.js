@@ -15,6 +15,7 @@ module.exports = async function limsDownloader(links, options = {}) {
         const result = await superagent.get(link);
         var metadata = JSON.parse(result.text);
         var nmrs = metadata.entry[0].nmrs.filter(a => a.experiment === 'noesygpps1dcomp');
+
         var specie = metadata.entry[0].parameters.filter(a => a.description === 'species')[0].value;
         if (nmrs.length > 0) {
             var jcamp = await request(nmrs[0].resourceURL);
@@ -31,7 +32,8 @@ module.exports = async function limsDownloader(links, options = {}) {
             await fs.writeFile(path.join(__dirname, '../../data', `${m[1]}_${m[2]}.json`), JSON.stringify({
                 data: y,
                 label,
-                labelNum: label === 'arabica' ? 0 : 1
+                labelNum: label === 'arabica' ? 0 : 1,
+                parameters: metadata.entry[0].parameters
             }));
         }
     }
