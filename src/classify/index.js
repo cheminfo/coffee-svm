@@ -3,7 +3,6 @@
 const Stat = require('ml-stat').matrix;
 const fs = require('fs-promise');
 const path = require('path');
-const assert = require('assert');
 const SVM = require('libsvm-js/asm');
 const Kernel = require('ml-kernel');
 const range = require('lodash.range');
@@ -42,9 +41,8 @@ function RBFGrid() {
 function linearGrid() {
     loadData().then(([data, labels]) => {
         data = featureNormalize(data);
-        const RBFKernel = new Kernel('linear');
+        const KData = linearKernel.compute(data).addColumn(0, range(1, labels.length + 1));
         for (let cost of costs) {
-            const KData = RBFKernel.compute(data).addColumn(0, range(1, labels.length + 1));
             const svm = new SVM({
                 kernel: SVM.KERNEL_TYPES.PRECOMPUTED,
                 type: SVM.KERNEL_TYPES.C_SVC,
@@ -79,10 +77,20 @@ async function loadData() {
     for (let file of files) {
         const fileContent = await fs.readFile(path.join(dir, file), 'utf-8');
         const sample = JSON.parse(fileContent);
-        labels.push(sample.label === 'arabica' ? 0 : 1);
+        labels.push(sample.labelNum);
         data.push(sample.data);
     }
     return [data, labels];
 }
 
-linearGrid();
+const argv = process.argv.slice(2);
+if (argv.length === 0) {
+    console.warn('This script must be called with some arguments to do something (e.g. --linear)'); // eslint-disable-line no-console
+}
+if (argv.indexOf('--linear') > -1) {
+    linearGrid();
+}
+if (argv.indexOf('--rbf') > -1) {
+    RBFGrid();
+}
+

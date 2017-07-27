@@ -8,7 +8,9 @@
   ],
   "scripts": {
     "eslint": "eslint src test",
-    "eslint-fix": "npm run eslint -- --fix"
+    "eslint-fix": "npm run eslint -- --fix",
+    "prepare-data": "node src/prepare/index.js",
+    "classify": "node src/classify/index.js"
   },
   "repository": {
     "type": "git",
