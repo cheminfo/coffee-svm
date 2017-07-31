@@ -77,7 +77,9 @@ async function loadData() {
     for (let file of files) {
         const fileContent = await fs.readFile(path.join(dir, file), 'utf-8');
         const sample = JSON.parse(fileContent);
-        labels.push(sample.labelNum);
+        const label = getLabel('columbian', sample);
+        if (label === false) continue;
+        labels.push(label);
         data.push(sample.data);
     }
     return [data, labels];
@@ -85,7 +87,8 @@ async function loadData() {
 
 const argv = process.argv.slice(2);
 if (argv.length === 0) {
-    console.warn('This script must be called with some arguments to do something (e.g. --linear)'); // eslint-disable-line no-console
+    // eslint-disable-next-line no-console
+    console.warn('This script must be called with some arguments to do something (e.g. --linear)');
 }
 if (argv.indexOf('--linear') > -1) {
     linearGrid();
@@ -94,3 +97,31 @@ if (argv.indexOf('--rbf') > -1) {
     RBFGrid();
 }
 
+function getLabel(criteria, sample) {
+    switch (criteria) {
+        case 'arabica': {
+            var specie = sample.parameters.filter(a => a.description === 'species')[0].value;
+            if (specie.trim().toLowerCase().match(/\barabica/)) {
+                return 0;
+            } else if (specie.trim().toLowerCase().match(/\brobusta/)) {
+                return 1;
+            } else {
+                return false;
+            }
+        }
+        case 'columbian': {
+            var country = sample.parameters.filter(a => a.description === 'country')[0].value;
+            if (!country) {
+                return false;
+            }
+            if (country.toLowerCase() === 'colombia') {
+                return 0;
+            } else {
+                return 1;
+            }
+        }
+        default:
+            throw new Error('invalid criterium');
+    }
+
+}
